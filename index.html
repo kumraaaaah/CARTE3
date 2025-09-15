@@ -4,9 +4,7 @@
         <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
         <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
         <script src="https://raw.githack.com/donmccurdy/aframe-extras/master/dist/aframe-extras.loaders.min.js"></script>
-        <script src="https://raw.githack.com/AR-js-org/studio-backend/master/src/modules/marker/tools/gesture-detector.js"></script>
-        <script src="https://raw.githack.com/AR-js-org/studio-backend/master/src/modules/marker/tools/gesture-handler.js"></script>
-    </head>
+        </head>
 
     <body style="margin: 0; overflow: hidden;">
         <a-scene
@@ -16,8 +14,7 @@
             arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;"
             id="scene"
             embedded
-            gesture-detector
-        >
+            >
             <a-assets>
                 <a-asset-item
                     id="animated-asset"
@@ -37,13 +34,12 @@
             >
                 <a-entity
                     id="bowser-model"
-                    position="0 0 0"
+                    position="0 0.5 0"
                     scale="0.011321912960721008 0.011321912960721008 0.011321912960721008"
                     animation-mixer="loop: repeat"
                     gltf-model="#animated-asset"
                     class="clickable"
-                    gesture-handler
-                ></a-entity>
+                    ></a-entity>
             </a-marker>
 
             <a-entity camera></a-entity>
