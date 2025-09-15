@@ -20,9 +20,15 @@
                     id="sushi-asset"
                     src="assets/asset.gltf"
                 ></a-asset-item>
+
                 <a-asset-item
-                    id="osechi-asset"
-                    src="assets/source/polycam_osechi_adjusted.gltf"
+                    id="momo-asset"
+                    src="assets/momo_food.glb"
+                ></a-asset-item>
+
+                <a-asset-item
+                    id="noodles-asset"
+                    src="assets/noodles_with_soybean_paste_scaniverse_lidar.glb"
                 ></a-asset-item>
             </a-assets>
 
@@ -31,9 +37,6 @@
                 type="pattern"
                 preset="custom"
                 url="assets/marker.patt"
-                raycaster="objects: .clickable"
-                emitevents="true"
-                cursor="fuse: false; rayOrigin: mouse;"
                 id="markerA"
             >
                 <a-entity
@@ -45,10 +48,18 @@
                 ></a-entity>
 
                 <a-entity
-                    id="osechi-model"
+                    id="momo-model"
                     position="0 0 -2"
                     scale="0.01132191229759719 0.01132191229759719 0.01132191229759719"
-                    gltf-model="#osechi-asset"
+                    gltf-model="#momo-asset"
+                    visible="false"
+                ></a-entity>
+                
+                <a-entity
+                    id="noodles-model"
+                    position="0 0 -2"
+                    scale="0.01132191229759719 0.01132191229759719 0.01132191229759719"
+                    gltf-model="#noodles-asset"
                     visible="false"
                 ></a-entity>
             </a-marker>
@@ -58,9 +69,11 @@
         <script>
             AFRAME.registerComponent('swipe-handler', {
                 init: function () {
+                    // Updated the list to include all three models
                     this.models = [
                         document.querySelector('#sushi-model'),
-                        document.querySelector('#osechi-model')
+                        document.querySelector('#momo-model'),
+                        document.querySelector('#noodles-model')
                     ];
                     this.currentIndex = 0;
                     this.touchStartX = 0;
@@ -73,19 +86,15 @@
                         const touchEndX = e.changedTouches[0].clientX;
                         const deltaX = touchEndX - this.touchStartX;
 
-                        // Check if the swipe distance is significant
                         if (Math.abs(deltaX) > 50) {
-                            // Hide the current model
                             this.models[this.currentIndex].setAttribute('visible', 'false');
 
-                            // Determine the next model index
                             if (deltaX < 0) { // Swipe Left
                                 this.currentIndex = (this.currentIndex + 1) % this.models.length;
                             } else { // Swipe Right
                                 this.currentIndex = (this.currentIndex - 1 + this.models.length) % this.models.length;
                             }
                             
-                            // Show the new model
                             this.models[this.currentIndex].setAttribute('visible', 'true');
                         }
                     });
