@@ -13,13 +13,19 @@
             arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;"
             id="scene"
             embedded
+            swipe-handler
         >
             <a-assets>
                 <a-asset-item
-                    id="animated-asset"
+                    id="sushi-asset"
                     src="assets/asset.gltf"
                 ></a-asset-item>
+                <a-asset-item
+                    id="osechi-asset"
+                    src="assets/osechi/source/polycam_osechi_adjusted.gltf"
+                ></a-asset-item>
             </a-assets>
+
             <a-marker
                 id="animated-marker"
                 type="pattern"
@@ -31,16 +37,61 @@
                 id="markerA"
             >
                 <a-entity
-                    id="bowser-model"
+                    id="sushi-model"
                     position="0 0 -2"
                     scale="0.011321912960721008 0.011321912960721008 0.011321912960721008"
-                    animation-mixer="loop: repeat"
-                    gltf-model="#animated-asset"
-                    class="clickable"
+                    gltf-model="#sushi-asset"
+                    visible="true"
+                ></a-entity>
+
+                <a-entity
+                    id="osechi-model"
+                    position="0 0 -2"
+                    scale="0.011321912960721008 0.011321912960721008 0.011321912960721008"
+                    gltf-model="#osechi-asset"
+                    visible="false"
                 ></a-entity>
             </a-marker>
             <a-entity camera></a-entity>
         </a-scene>
+
+        <script>
+            AFRAME.registerComponent('swipe-handler', {
+                init: function () {
+                    this.models = [
+                        document.querySelector('#sushi-model'),
+                        document.querySelector('#osechi-model')
+                    ];
+                    this.currentIndex = 0;
+                    this.touchStartX = 0;
+
+                    this.el.sceneEl.addEventListener('touchstart', (e) => {
+                        this.touchStartX = e.changedTouches[0].clientX;
+                    });
+
+                    this.el.sceneEl.addEventListener('touchend', (e) => {
+                        const touchEndX = e.changedTouches[0].clientX;
+                        const deltaX = touchEndX - this.touchStartX;
+
+                        // Check if the swipe distance is significant
+                        if (Math.abs(deltaX) > 50) {
+                            // Hide the current model
+                            this.models[this.currentIndex].setAttribute('visible', 'false');
+
+                            // Determine the next model index
+                            if (deltaX < 0) { // Swipe Left
+                                this.currentIndex = (this.currentIndex + 1) % this.models.length;
+                            } else { // Swipe Right
+                                this.currentIndex = (this.currentIndex - 1 + this.models.length) % this.models.length;
+                            }
+                            
+                            // Show the new model
+                            this.models[this.currentIndex].setAttribute('visible', 'true');
+                        }
+                    });
+                }
+            });
+        </script>
     </body>
 </html>
 
